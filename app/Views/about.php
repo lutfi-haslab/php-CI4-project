@@ -11,7 +11,9 @@
             <p>Halo</p>
         </div>
     </div>
+    <button onclick="alert('halo')">Halo</button>
     <div x-data="table" x-init="init" class="w-full h-full">
+    <button x-on:click="alert('Hello World!')">Say Hi</button>
         <table id="dataTable"></table>
     </div>
 </div>
