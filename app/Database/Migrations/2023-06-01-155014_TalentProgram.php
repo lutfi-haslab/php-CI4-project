@@ -4,11 +4,11 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class User extends Migration
+class TalentProgram extends Migration
 {
     public function up()
     {
-        $this->forge->dropTable('users', true);
+        $this->forge->dropTable('talent_program', true);
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -16,23 +16,9 @@ class User extends Migration
                 'unsigned'       => true,
 				'auto_increment' => true
             ],
-            'name' => [
+            'nama' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255'
-            ],
-            'email' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100
-            ],
-            'password' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100,
-                'null' => true
-            ],
-            'roles' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100,
-                'null' => true
             ],
             'created_at' => [
                 'type' => 'INT',
@@ -55,11 +41,11 @@ class User extends Migration
         $this->forge->addKey('id', TRUE);
 
         // Membuat tabel news
-        $this->forge->createTable('users', TRUE);
+        $this->forge->createTable('talent_program', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('users');
+        $this->forge->dropTable('talent_program', true);
     }
 }

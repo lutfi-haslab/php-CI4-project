@@ -4,11 +4,11 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class User extends Migration
+class HistoryAset extends Migration
 {
     public function up()
     {
-        $this->forge->dropTable('users', true);
+        $this->forge->dropTable('history_aset', true);
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -16,23 +16,17 @@ class User extends Migration
                 'unsigned'       => true,
 				'auto_increment' => true
             ],
-            'name' => [
+            'nama_aset' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255'
             ],
-            'email' => [
+            'ukuran' => [
                 'type' => 'VARCHAR',
-                'constraint' => 100
+                'constraint' => '255'
             ],
-            'password' => [
+            'info' => [
                 'type' => 'VARCHAR',
-                'constraint' => 100,
-                'null' => true
-            ],
-            'roles' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100,
-                'null' => true
+                'constraint' => '255'
             ],
             'created_at' => [
                 'type' => 'INT',
@@ -47,19 +41,18 @@ class User extends Migration
                 'unsigned' => true,
                 'default' => null,
                 'null' => true
-            ]
-
+            ] 
         ]);
 
         // Membuat primary key
         $this->forge->addKey('id', TRUE);
 
         // Membuat tabel news
-        $this->forge->createTable('users', TRUE);
+        $this->forge->createTable('history_aset', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('users');
+        $this->forge->dropTable('history_aset', true);
     }
 }

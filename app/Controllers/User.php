@@ -2,46 +2,66 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use Config\Database;
 
-class Home extends BaseController
+class User extends BaseController
 {
     use ResponseTrait;
-
+    protected $db;
     public function __construct()
     {
-
+        $this->db = Database::connect();
     }
-    public function index($id1, $id2)
+    public function index()
     {
-        echo $id2;
+        //
     }
 
     public function create()
     {
-        $data = [
-            'name' => $this->request->getVar('name'),
-            'email' => $this->request->getVar('email'),
-            'created_at' => time(),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
-        ];
+        $checkName = $this->db->table('users')
+            ->where('name', $this->request->getVar('name'))
+            ->get()
+            ->getResultArray();
+        $checkEmail = $this->db->table('users')
+            ->where('email', $this->request->getVar('email'))
+            ->get()
+            ->getResultArray();
 
-        $query = $this->db->table('users')
-            ->insert($data);
-        if ($query) {
-            return $this->respondCreated([
-                "msg" => "success",
-                "data" => $data,
-                "code" => 201
-            ]);
-        } else {
-            return $this->fail([
-                "msg" => "Error",
-                "code" => 400
-            ], 400);
+        if (empty($checkName) && empty($checkEmail)) {
+            $data = [
+                'name' => $this->request->getVar('name'),
+                'email' => $this->request->getVar('email'),
+                'roles' => 1,
+                'created_at' => time(),
+                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+            ];
+
+            $query = $this->db->table('users')
+                ->insert($data);
+            if ($query) {
+                return $this->respondCreated([
+                    "msg" => "success",
+                    "data" => $data,
+                    "code" => 201
+                ]);
+            } else {
+                return $this->fail([
+                    "msg" => "Error",
+                    "code" => 400
+                ], 400);
+            }
         }
+
+        return $this->respondCreated([
+            "msg" => "User exist and not craeted, check name or email!",
+            "code" => 409,
+            "name" => $checkName,
+            "email" => $checkEmail
+        ]);
     }
     public function login()
     {
@@ -81,6 +101,8 @@ class Home extends BaseController
     public function read()
     {
         $query = $this->db->table('users')
+            ->join('roles', 'roles.id = users.roles')
+            ->select('users.id, users.name, users.email, users.created_at, updated_at,roles.role')
             ->get()
             ->getResultArray();
 

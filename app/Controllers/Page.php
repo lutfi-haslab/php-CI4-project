@@ -14,6 +14,7 @@ class Page extends BaseController
     $this->cachePage(1);
     return view('table');
   }
+  
   public function sign()
   {
     $this->cachePage(1);
